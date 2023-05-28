@@ -1,5 +1,6 @@
 import { Prisma, User } from "@prisma/client";
 import { register as regist } from "../repositories/AuthRespository";
+import bcrypt from "bcrypt";
 
 export const userRegister = async (data: User) => {
   let response = {
@@ -11,7 +12,8 @@ export const userRegister = async (data: User) => {
   };
 
   try {
-    const user = await regist(data);
+    const password = await bcrypt.hash(data.password, 10);
+    const user = await regist({ ...data, ...{ password } });
     response = {
       status: true,
       statusCode: 200,
