@@ -1,7 +1,11 @@
 import { Application, Router } from "express";
 import { foodRouter } from "./food";
+import { authRoute } from "./auth";
 
-const routesArr: [string, Router][] = [["/foods", foodRouter]];
+const routesArr: [string, Router][] = [
+  ["/auth", authRoute],
+  ["/foods", foodRouter],
+];
 
 export const routes = (app: Application) => {
   routesArr.map((item) => {
