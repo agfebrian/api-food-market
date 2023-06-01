@@ -17,11 +17,66 @@ model User {
   city         String
   house_number String
   phone_number String
+  orders       Order[]
 }
 
 model Food {
-  id          String @id @default(uuid())
+  id          String               @id @default(uuid())
   name        String
   description String
   price       Int
+  rating      Int
+  image       String
+  categories  CategoriesOnFoods[]
+  ingredients IngredientsOnFoods[]
+  orders      Order[]
+}
+
+model Category {
+  id    String              @id @default(uuid())
+  name  String
+  foods CategoriesOnFoods[]
+}
+
+model CategoriesOnFoods {
+  food        Food     @relation(fields: [food_id], references: [id])
+  food_id     String
+  category    Category @relation(fields: [category_id], references: [id])
+  category_id String
+
+  @@id([food_id, category_id])
+}
+
+model Ingredient {
+  id    String               @id @default(uuid())
+  name  String
+  foods IngredientsOnFoods[]
+}
+
+model IngredientsOnFoods {
+  food          Food       @relation(fields: [food_id], references: [id])
+  food_id       String
+  ingredient    Ingredient @relation(fields: [ingredient_id], references: [id])
+  ingredient_id String
+
+  @@id([food_id, ingredient_id])
+}
+
+model Order {
+  id      String @id
+  status  Status @default(PENDING)
+  quatity Int
+  total   Int
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+  food    Food   @relation(fields: [food_id], references: [id])
+  food_id String
+}
+
+enum Status {
+  PENDING
+  PAID
+  ON_DELIVERY
+  CANCELED
+  DELIVERED
 }
