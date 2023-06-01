@@ -1,16 +1,22 @@
 import { Prisma, User } from "@prisma/client";
-import { register as regist } from "../repositories/AuthRespository";
+import { register as regist, findUser } from "../repositories/AuthRespository";
+import { signJWT } from "../utils/auth/jwt";
+import ResponseApi from "../types/response.interface";
 import bcrypt from "bcrypt";
 
-export const userRegister = async (data: User) => {
-  let response = {
-    status: true,
-    statusCode: 200,
-    data: {},
-    message: "",
-    errors: [],
-  };
+interface Data extends ResponseApi {
+  data: null | object | Array<any>;
+}
 
+export let response: Data = {
+  status: true,
+  statusCode: 200,
+  data: {},
+  message: "",
+  errors: [],
+};
+
+export const userRegister = async (data: User) => {
   try {
     const password = await bcrypt.hash(data.password, 10);
     const user = await regist({ ...data, ...{ password } });
@@ -44,5 +50,41 @@ export const userRegister = async (data: User) => {
     }
   }
 
+  return response;
+};
+
+export const userLogin = async (data: User) => {
+  try {
+    // find user on db
+    const user = await findUser("email", data.email);
+    // compare request password
+    const comparePassword = await bcrypt.compare(data.password, user!.password);
+    if (comparePassword) {
+      const token = signJWT(data.email, data.password);
+      response = {
+        status: true,
+        statusCode: 200,
+        data: { ...user, ...{ token } },
+        message: "Cool, login successed",
+        errors: [],
+      };
+    } else {
+      response = {
+        status: false,
+        statusCode: 422,
+        data: {},
+        message: "Password doesn't match",
+        errors: [],
+      };
+    }
+  } catch (error) {
+    response = {
+      status: false,
+      statusCode: 422,
+      data: {},
+      message: "Email not found",
+      errors: [],
+    };
+  }
   return response;
 };

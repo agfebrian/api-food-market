@@ -7,3 +7,12 @@ export const register = async (data: User) => {
   });
   return user;
 };
+
+export const findUser = async (key: string, value: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      [`${key}`]: value,
+    },
+  });
+  return user;
+};
