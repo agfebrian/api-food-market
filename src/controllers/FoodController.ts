@@ -1,18 +1,14 @@
-import { Request, Response, NextFunction } from "express";
-import { getAll } from "../repositories/FoodRepository";
-import { createFood } from "../services/FoodService";
+import { Request, Response } from "express";
+import { createFood, getAllFoods } from "../services/FoodService";
 
-export const getFoods = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const foods = await getAll();
-  res.send({
-    status: true,
-    data: foods,
-    message: "Success getting foods",
-  });
+export const getFoods = async (req: Request, res: Response) => {
+  const params = {
+    category: req.query.category || "",
+    perPage: req.query.perPage || "",
+  };
+
+  const data = await getAllFoods(params as any);
+  res.status(data.statusCode).send(data);
 };
 
 export const addFood = async (req: Request, res: Response) => {

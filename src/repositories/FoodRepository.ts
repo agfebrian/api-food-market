@@ -1,8 +1,28 @@
 import { Food } from "@prisma/client";
 import { prisma } from "../prisma/orm";
 
-export const getAll = async () => {
-  const data = await prisma.food.findMany();
+export const getAll = async (params: { category: string; perPage: string }) => {
+  const data = await prisma.food.findMany({
+    where: {
+      OR: {
+        categories: {
+          some: {
+            category: {
+              name: {
+                contains: params.category,
+              },
+            },
+          },
+        },
+      },
+    },
+    include: {
+      categories: {
+        select: { category: true },
+      },
+    },
+    take: params.perPage ? Number(params.perPage) : 10,
+  });
   return data;
 };
 

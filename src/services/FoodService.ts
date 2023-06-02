@@ -1,15 +1,47 @@
 import { Food } from "@prisma/client";
 import resposeApi from "../response";
 import ResponseApi from "../types/response.interface";
-import { create } from "../repositories/FoodRepository";
+import { create, getAll } from "../repositories/FoodRepository";
 
 interface Data extends ResponseApi {
-  data: Food;
+  data: Food | Food[];
 }
 
 export let response: Data = {
   ...resposeApi,
   data: {} as Food,
+};
+
+export const getAllFoods = async (params: {
+  category: string;
+  perPage: string;
+}) => {
+  try {
+    const foods = await getAll(params);
+    // changes categories structure
+    foods.forEach((food) => {
+      food.categories = food.categories.map(
+        (category) => category.category
+      ) as any;
+    });
+
+    response = {
+      status: true,
+      statusCode: 200,
+      data: foods,
+      message: "Success getting foods",
+      errors: [],
+    };
+  } catch (error) {
+    response = {
+      status: false,
+      statusCode: 422,
+      data: [],
+      message: "Failed getting foods",
+      errors: [],
+    };
+  }
+  return response;
 };
 
 export const createFood = async (data: Food) => {
