@@ -1,4 +1,4 @@
-export default interface ResposeApi {
+export default interface ResponseApi {
   status: boolean;
   statusCode: number;
   message: string;
