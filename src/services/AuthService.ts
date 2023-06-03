@@ -20,10 +20,22 @@ export const userRegister = async (data: User) => {
   try {
     const password = await bcrypt.hash(data.password, 10);
     const user = await regist({ ...data, ...{ password } });
+    const token: string = signJWT(data.email, data.password);
     response = {
       status: true,
       statusCode: 200,
-      data: user,
+      data: {
+        user: {
+          name: user.name,
+          email: user.email,
+          address: user.address,
+          city: user.city,
+          avatar: user.avatar,
+          house_number: user.house_number,
+          phone_number: user.phone_number,
+        },
+        ...{ token },
+      },
       message: "User registered",
       errors: [],
     };
