@@ -1,7 +1,7 @@
 import { Food } from "@prisma/client";
 import resposeApi from "../response";
 import ResponseApi from "../types/response.interface";
-import { create, getAll } from "../repositories/FoodRepository";
+import { create, getAll, getOneById } from "../repositories/FoodRepository";
 
 interface Data extends ResponseApi {
   data: Food | Food[];
@@ -32,13 +32,13 @@ export const getAllFoods = async (params: {
       message: "Success getting foods",
       errors: [],
     };
-  } catch (error) {
+  } catch (error: any) {
     response = {
       status: false,
       statusCode: 422,
       data: [],
       message: "Failed getting foods",
-      errors: [],
+      errors: [error.message],
     };
   }
   return response;
@@ -54,13 +54,40 @@ export const createFood = async (data: Food) => {
       message: "Success add food",
       errors: [],
     };
-  } catch (error) {
+  } catch (error: any) {
     response = {
       status: false,
       statusCode: 422,
       data: {} as Food,
       message: "Failed add food",
+      errors: [error.message],
+    };
+  }
+  return response;
+};
+
+export const findFood = async (id: string) => {
+  try {
+    const food = await getOneById(id);
+    // changes ingredients structure
+    food!.ingredients = food!.ingredients.map(
+      (ingredient) => ingredient.ingredient
+    ) as any;
+
+    response = {
+      status: true,
+      statusCode: 200,
+      data: food as Food,
+      message: "Success getting food",
       errors: [],
+    };
+  } catch (error: any) {
+    response = {
+      status: false,
+      statusCode: 422,
+      data: {} as Food,
+      message: "Failed getting food",
+      errors: [error.message],
     };
   }
   return response;

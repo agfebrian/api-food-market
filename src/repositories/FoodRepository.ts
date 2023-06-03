@@ -26,6 +26,20 @@ export const getAll = async (params: { category: string; perPage: string }) => {
   return data;
 };
 
+export const getOneById = async (id: string) => {
+  const food = await prisma.food.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      ingredients: {
+        select: { ingredient: true },
+      },
+    },
+  });
+  return food;
+};
+
 export const create = async (data: Food) => {
   const food = await prisma.food.create({ data });
   return food;
