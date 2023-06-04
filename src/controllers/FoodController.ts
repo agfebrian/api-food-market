@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { createFood, getAllFoods, findFood } from "../services/FoodService";
+import {
+  createFood,
+  getAllFoods,
+  findFood,
+  deleteFoods,
+} from "../services/FoodService";
 
 export const handlerGetFoods = async (req: Request, res: Response) => {
   const params = {
@@ -20,5 +25,11 @@ export const handlerCreateFood = async (req: Request, res: Response) => {
 export const handlerGetFood = async (req: Request, res: Response) => {
   const payload = req.params;
   const data = await findFood(payload.id);
+  res.status(data.statusCode).send(data);
+};
+
+export const handlerDeleteFood = async (req: Request, res: Response) => {
+  const payload = req.body;
+  const data = await deleteFoods(payload.id);
   res.status(data.statusCode).send(data);
 };

@@ -1,7 +1,12 @@
 import { Food } from "@prisma/client";
 import resposeApi from "../response";
 import ResponseApi from "../types/response.interface";
-import { create, getAll, getOneById } from "../repositories/FoodRepository";
+import {
+  create,
+  getAll,
+  getOneById,
+  remove,
+} from "../repositories/FoodRepository";
 
 interface Data extends ResponseApi {
   data: Food | Food[];
@@ -79,6 +84,28 @@ export const findFood = async (id: string) => {
       statusCode: 200,
       data: food as Food,
       message: "Success getting food",
+      errors: [],
+    };
+  } catch (error: any) {
+    response = {
+      status: false,
+      statusCode: 422,
+      data: {} as Food,
+      message: "Failed getting food",
+      errors: [error.message],
+    };
+  }
+  return response;
+};
+
+export const deleteFoods = async (ids: string[]) => {
+  try {
+    const foods = await remove(ids);
+    response = {
+      status: true,
+      statusCode: 200,
+      data: [],
+      message: "Success delete food",
       errors: [],
     };
   } catch (error: any) {

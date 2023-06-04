@@ -44,3 +44,14 @@ export const create = async (data: Food) => {
   const food = await prisma.food.create({ data });
   return food;
 };
+
+export const remove = async (data: string[]) => {
+  const foods = await prisma.food.deleteMany({
+    where: {
+      id: {
+        in: data,
+      },
+    },
+  });
+  return foods;
+};
