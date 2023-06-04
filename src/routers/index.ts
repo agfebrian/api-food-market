@@ -3,6 +3,7 @@ import { foodRouter } from "./food";
 import { authRoute } from "./auth";
 import { categoryRouter } from "./category";
 
+// index routes
 const routesArr: [string, Router][] = [
   ["/auth", authRoute],
   ["/foods", foodRouter],
