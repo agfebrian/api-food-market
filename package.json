@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "start": "npx tsc -w",
     "dev": "nodemon ./build/index.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate && prisma migrate deploy"
   },
   "author": "febrian",
   "license": "ISC",
