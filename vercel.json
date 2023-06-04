@@ -1,15 +1,16 @@
 {
   "version": 2,
+  "outputDirectory": "build",
   "builds": [
     {
-      "src": "index.ts",
+      "src": "index.js",
       "use": "@now/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "index.ts"
+      "dest": "index.js"
     }
   ]
 }
