@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "start": "npx tsc -w",
-    "dev": "nodemon ./build/index.js"
+    "dev": "nodemon ./build/index.js",
+    "postinstall": "prisma generate"
   },
   "author": "febrian",
   "license": "ISC",
