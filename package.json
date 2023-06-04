@@ -12,7 +12,8 @@
   "author": "febrian",
   "license": "ISC",
   "prisma": {
-    "schema": "./src/prisma/schema.prisma"
+    "schema": "./src/prisma/schema.prisma",
+    "seed": "ts-node ./src/prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.14.1",
