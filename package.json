@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "start": "npx tsc -w",
     "dev": "nodemon ./build/index.js",
-    "vercel-build": "prisma generate && prisma migrate reset"
+    "postinstall": "prisma generate && prisma migrate reset"
   },
   "author": "febrian",
   "license": "ISC",
