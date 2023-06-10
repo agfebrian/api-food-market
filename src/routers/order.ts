@@ -7,4 +7,4 @@ import {
 export const orderRouter: Router = Router();
 
 orderRouter.post("/", handlerOrder);
-orderRouter.post("/payment-notification", handlerPaymentNotification);
+orderRouter.get("/payment-notification", handlerPaymentNotification);
