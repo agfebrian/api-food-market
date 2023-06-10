@@ -42,6 +42,8 @@ export const createOrder = async (data: RequestOrder) => {
   };
 
   try {
+    const { redirect_url } = await snap.createTransaction(params);
+
     await create({
       id: orderId,
       status: "PENDING",
@@ -53,30 +55,15 @@ export const createOrder = async (data: RequestOrder) => {
       updated_at: new Date(),
     });
 
-    snap
-      .createTransaction(params)
-      .then((transaction: { token: string; redirect_url: string }) => {
-        response = {
-          status: true,
-          statusCode: 200,
-          data: {
-            redirect_url: transaction.redirect_url,
-          },
-          message: "Redirect page",
-          errors: [],
-        };
-      })
-      .catch((err: any) => {
-        response = {
-          status: false,
-          statusCode: 422,
-          data: {
-            redirect_url: "",
-          },
-          message: "Failed",
-          errors: [err.message],
-        };
-      });
+    response = {
+      status: true,
+      statusCode: 200,
+      data: {
+        redirect_url: redirect_url,
+      },
+      message: "Redirect page",
+      errors: [],
+    };
   } catch (error: any) {
     response = {
       status: false,
