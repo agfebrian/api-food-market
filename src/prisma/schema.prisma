@@ -63,14 +63,16 @@ model IngredientsOnFoods {
 }
 
 model Order {
-  id      String @id
-  status  Status @default(PENDING)
-  quatity Int
-  total   Int
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id String
-  food    Food   @relation(fields: [food_id], references: [id])
-  food_id String
+  id         String   @id
+  status     Status   @default(PENDING)
+  quantity   Int
+  total      Int
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    String
+  food       Food     @relation(fields: [food_id], references: [id])
+  food_id    String
+  created_at DateTime @default(now()) @db.Timestamptz(3)
+  updated_at DateTime @updatedAt @db.Timestamptz(3)
 }
 
 enum Status {
