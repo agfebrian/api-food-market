@@ -2,14 +2,15 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/index.ts",
+      "src": "index.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/index.ts"
+      "dest": "/"
     }
-  ]
+  ],
+  "rewrites": [{"source": "/api/(.*)", "destination": "/api"}]
 }
