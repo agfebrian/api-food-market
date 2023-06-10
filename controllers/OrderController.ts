@@ -8,7 +8,11 @@ export const handlerOrder = async (req: Request, res: Response) => {
   res.status(data.statusCode).send(data);
 };
 
-export const handlerPaymentNotification = async (res: Response) => {
-  const data = await paymentNotification();
+export const handlerPaymentNotification = async (
+  req: Request,
+  res: Response
+) => {
+  const request = req.body;
+  const data = await paymentNotification(request);
   res.status(data.statusCode).send(data);
 };

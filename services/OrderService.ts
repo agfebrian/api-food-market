@@ -91,7 +91,7 @@ export const createOrder = async (data: RequestOrder) => {
   return response;
 };
 
-export const paymentNotification = async () => {
+export const paymentNotification = async (data: any) => {
   const apiClient = new midtransClient.Snap({
     isProduction: false,
     serverKey: process.env.SERVER_KEY_PAYMENT,
@@ -99,7 +99,7 @@ export const paymentNotification = async () => {
   });
 
   try {
-    const statusResponse = await apiClient.transaction.notification();
+    const statusResponse = await apiClient.transaction.notification(data);
     const orderId = statusResponse.order_id;
     const transactionStatus = statusResponse.transaction_status;
 
