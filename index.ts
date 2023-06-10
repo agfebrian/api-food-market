@@ -1,5 +1,5 @@
 import express, { Application } from "express";
-import { routes } from "../routers";
+import { routes } from "./src/routers";
 import bodyParser from "body-parser";
 import cors from "cors";
 
