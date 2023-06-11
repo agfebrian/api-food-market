@@ -8,18 +8,20 @@ export const signJWT = (email: string, password: string) => {
 
 export const verifyJWT = (
   token: string
-): { status: boolean; message: string } => {
+): { status: boolean; message: string; encoded: { email: string } } => {
   const key = "secret";
   const data = {
     status: true,
     message: "Token verified",
+    encoded: { email: "" },
   };
 
-  jwt.verify(token, key, (err: any) => {
+  jwt.verify(token, key, (err: any, encoded) => {
     if (err) {
       data.status = false;
       data.message = err.message;
-      return data;
+    } else {
+      data.encoded = encoded as any;
     }
   });
 
