@@ -1,20 +1,80 @@
 import midtransClient from "midtrans-client";
-import { create, updateOrderStatus } from "../repositories/OrderRepository";
+import {
+  create,
+  getAll,
+  getOneByTrx,
+  updateOrderStatus,
+} from "../repositories/OrderRepository";
 import { RequestOrder } from "../types/request-order.interface";
-import ResponseApi from "../types/response.interface";
-import responseApi from "../response";
+import ParamFilterOrder from "../types/param-filter-order.interface";
+import { response, setResponse } from "../response";
+import { Status } from "@prisma/client";
 
-interface Data extends ResponseApi {
-  data: {
-    redirect_url: string;
-  };
-}
+export const getAllOrder = async (data: ParamFilterOrder) => {
+  let status: Status[] = [];
+  if (data.status) {
+    data.status.split(",").forEach((item) => {
+      switch (item) {
+        case "1":
+          status.push(Status.PENDING);
+          break;
+        case "2":
+          status.push(Status.PAID);
+          break;
+        case "3":
+          status.push(Status.ON_DELIVERY);
+          break;
+        case "4":
+          status.push(Status.DELIVERED);
+          break;
+        case "5":
+          status.push(Status.CANCELED);
+          break;
+      }
+    });
+  }
 
-export let response: Data = {
-  ...responseApi,
-  data: {
-    redirect_url: "",
-  },
+  try {
+    const orders = await getAll(data, status);
+    setResponse({
+      status: true,
+      statusCode: 200,
+      data: orders,
+      message: "Success getting orders",
+      errors: [],
+    });
+  } catch (error: any) {
+    setResponse({
+      status: false,
+      statusCode: 422,
+      data: [],
+      message: "Failed getting orders",
+      errors: [error.message],
+    });
+  }
+  return response;
+};
+
+export const findOrder = async (trx: string) => {
+  try {
+    const order = await getOneByTrx(trx);
+    setResponse({
+      status: true,
+      statusCode: 200,
+      data: order,
+      message: "Success getting order",
+      errors: [],
+    });
+  } catch (error: any) {
+    setResponse({
+      status: false,
+      statusCode: 422,
+      data: [],
+      message: "Failed getting orders",
+      errors: [error.message],
+    });
+  }
+  return response;
 };
 
 export const createOrder = async (data: RequestOrder) => {
@@ -55,7 +115,7 @@ export const createOrder = async (data: RequestOrder) => {
       updated_at: new Date(),
     });
 
-    response = {
+    setResponse({
       status: true,
       statusCode: 200,
       data: {
@@ -63,9 +123,9 @@ export const createOrder = async (data: RequestOrder) => {
       },
       message: "Redirect page",
       errors: [],
-    };
+    });
   } catch (error: any) {
-    response = {
+    setResponse({
       status: false,
       statusCode: 422,
       data: {
@@ -73,7 +133,7 @@ export const createOrder = async (data: RequestOrder) => {
       },
       message: "Failed",
       errors: [error.message],
-    };
+    });
   }
   return response;
 };
@@ -94,13 +154,13 @@ export const paymentNotification = async (data: any) => {
       // TODO set transaction status on your database to 'success'
       // and response with 200 OK
       await updateOrderStatus(orderId, "DELIVERED");
-      response = {
+      setResponse({
         status: true,
         statusCode: 200,
         message: "Success payment order",
         data: {} as any,
         errors: [],
-      };
+      });
     } else if (
       transactionStatus == "cancel" ||
       transactionStatus == "deny" ||
@@ -109,33 +169,33 @@ export const paymentNotification = async (data: any) => {
       // TODO set transaction status on your database to 'failure'
       // and response with 200 OK
       await updateOrderStatus(orderId, "CANCELED");
-      response = {
+      setResponse({
         status: true,
         statusCode: 200,
         message: "Failed payment order",
         data: {} as any,
         errors: [],
-      };
+      });
     } else if (transactionStatus == "pending") {
       // TODO set transaction status on your database to 'pending' / waiting payment
       // and response with 200 OK
       await updateOrderStatus(orderId, "PENDING");
-      response = {
+      setResponse({
         status: true,
         statusCode: 200,
         message: "Waiting payment order",
         data: {} as any,
         errors: [],
-      };
+      });
     }
   } catch (error: any) {
-    response = {
+    setResponse({
       status: false,
       statusCode: 422,
       message: "Failed getting payment notification",
       data: {} as any,
       errors: [error.message],
-    };
+    });
   }
   return response;
 };

@@ -1,5 +1,6 @@
 import { Food } from "@prisma/client";
-import resposeApi from "../response";
+// import resposeApi from "../response";
+import { response, setResponse } from "../response";
 import ResponseApi from "../types/response.interface";
 import {
   create,
@@ -8,14 +9,14 @@ import {
   remove,
 } from "../repositories/FoodRepository";
 
-interface Data extends ResponseApi {
-  data: Food | Food[];
-}
+// interface Data extends ResponseApi {
+//   data: Food | Food[];
+// }
 
-export let response: Data = {
-  ...resposeApi,
-  data: {} as Food,
-};
+// export let response: Data = {
+//   ...resposeApi,
+//   data: {} as Food,
+// };
 
 export const getAllFoods = async (params: {
   category: string;
@@ -30,21 +31,21 @@ export const getAllFoods = async (params: {
       ) as any;
     });
 
-    response = {
+    setResponse({
       status: true,
       statusCode: 200,
       data: foods,
       message: "Success getting foods",
       errors: [],
-    };
+    });
   } catch (error: any) {
-    response = {
+    setResponse({
       status: false,
       statusCode: 422,
       data: [],
       message: "Failed getting foods",
       errors: [error.message],
-    };
+    });
   }
   return response;
 };
@@ -52,21 +53,21 @@ export const getAllFoods = async (params: {
 export const createFood = async (data: Food) => {
   try {
     const food = await create(data);
-    response = {
+    setResponse({
       status: true,
       statusCode: 201,
       data: food,
       message: "Success add food",
       errors: [],
-    };
+    });
   } catch (error: any) {
-    response = {
+    setResponse({
       status: false,
       statusCode: 422,
       data: {} as Food,
       message: "Failed add food",
       errors: [error.message],
-    };
+    });
   }
   return response;
 };
@@ -79,21 +80,21 @@ export const findFood = async (id: string) => {
       (ingredient) => ingredient.ingredient
     ) as any;
 
-    response = {
+    setResponse({
       status: true,
       statusCode: 200,
       data: food as Food,
       message: "Success getting food",
       errors: [],
-    };
+    });
   } catch (error: any) {
-    response = {
+    setResponse({
       status: false,
       statusCode: 422,
       data: {} as Food,
       message: "Failed getting food",
       errors: [error.message],
-    };
+    });
   }
   return response;
 };
@@ -101,21 +102,21 @@ export const findFood = async (id: string) => {
 export const deleteFoods = async (ids: string[]) => {
   try {
     const foods = await remove(ids);
-    response = {
+    setResponse({
       status: true,
       statusCode: 200,
       data: [],
       message: "Success delete food",
       errors: [],
-    };
+    });
   } catch (error: any) {
-    response = {
+    setResponse({
       status: false,
       statusCode: 422,
       data: {} as Food,
       message: "Failed getting food",
       errors: [error.message],
-    };
+    });
   }
   return response;
 };

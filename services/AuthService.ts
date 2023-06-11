@@ -1,27 +1,28 @@
 import { Prisma, User } from "@prisma/client";
 import { register as regist, findUser } from "../repositories/AuthRespository";
 import { signJWT } from "../utils/auth/jwt";
-import ResponseApi from "../types/response.interface";
+import { response, setResponse } from "../response";
+// import ResponseApi from "../types/response.interface";
 import bcrypt from "bcrypt";
 
-interface Data extends ResponseApi {
-  data: null | object | Array<any>;
-}
+// interface Data extends ResponseApi {
+//   data: null | object | Array<any>;
+// }
 
-export let response: Data = {
-  status: true,
-  statusCode: 200,
-  data: {},
-  message: "",
-  errors: [],
-};
+// export let response: Data = {
+//   status: true,
+//   statusCode: 200,
+//   data: {},
+//   message: "",
+//   errors: [],
+// };
 
 export const userRegister = async (data: User) => {
   try {
     const password = await bcrypt.hash(data.password, 10);
     const user = await regist({ ...data, ...{ password } });
     const token: string = signJWT(data.email, data.password);
-    response = {
+    setResponse({
       status: true,
       statusCode: 200,
       data: {
@@ -38,27 +39,27 @@ export const userRegister = async (data: User) => {
       },
       message: "User registered",
       errors: [],
-    };
+    });
   } catch (error: any) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
-      response = {
+      setResponse({
         status: false,
         statusCode: 400,
         data: {},
         message: "Email is already available",
         errors: [],
-      };
+      });
     } else {
-      response = {
+      setResponse({
         status: false,
         statusCode: 500,
         data: {},
         message: error.message,
         errors: [],
-      };
+      });
     }
   }
 
@@ -73,30 +74,30 @@ export const userLogin = async (data: User) => {
     const comparePassword = await bcrypt.compare(data.password, user!.password);
     if (comparePassword) {
       const token = signJWT(data.email, data.password);
-      response = {
+      setResponse({
         status: true,
         statusCode: 200,
         data: { ...user, ...{ token } },
         message: "Cool, login successed",
         errors: [],
-      };
+      });
     } else {
-      response = {
+      setResponse({
         status: false,
         statusCode: 422,
         data: {},
         message: "Password doesn't match",
         errors: [],
-      };
+      });
     }
   } catch (error) {
-    response = {
+    setResponse({
       status: false,
       statusCode: 422,
       data: {},
       message: "Email not found",
       errors: [],
-    };
+    });
   }
   return response;
 };
