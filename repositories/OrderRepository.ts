@@ -17,6 +17,10 @@ export const getAll = async (data: ParamFilterOrder, statusEnum: Status[]) => {
         },
       },
     },
+    include: {
+      food: true,
+      user: true,
+    },
   });
   return orders;
 };
