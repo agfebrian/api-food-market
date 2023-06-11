@@ -2,20 +2,8 @@ import { Prisma, User } from "@prisma/client";
 import { register as regist, findUser } from "../repositories/AuthRespository";
 import { signJWT } from "../utils/auth/jwt";
 import { response, setResponse } from "../response";
-// import ResponseApi from "../types/response.interface";
 import bcrypt from "bcrypt";
-
-// interface Data extends ResponseApi {
-//   data: null | object | Array<any>;
-// }
-
-// export let response: Data = {
-//   status: true,
-//   statusCode: 200,
-//   data: {},
-//   message: "",
-//   errors: [],
-// };
+import ParamFilterProfile from "../types/param-filter-profile.interface";
 
 export const userRegister = async (data: User) => {
   try {
@@ -97,6 +85,28 @@ export const userLogin = async (data: User) => {
       data: {},
       message: "Email not found",
       errors: [],
+    });
+  }
+  return response;
+};
+
+export const userProfile = async (data: ParamFilterProfile) => {
+  try {
+    const user = await findUser("email", data.email!);
+    setResponse({
+      status: true,
+      statusCode: 200,
+      data: user,
+      message: "Success getting profile",
+      errors: [],
+    });
+  } catch (error: any) {
+    setResponse({
+      status: false,
+      statusCode: 422,
+      data: null,
+      message: "Failed getting profile",
+      errors: [error.message],
     });
   }
   return response;
