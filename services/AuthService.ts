@@ -1,6 +1,6 @@
 import { Prisma, User } from "@prisma/client";
 import { register as regist, findUser } from "../repositories/AuthRespository";
-import { signJWT } from "../utils/auth/jwt";
+import { signJWT, verifyJWT } from "../utils/auth/jwt";
 import { response, setResponse } from "../response";
 import bcrypt from "bcrypt";
 import ParamFilterProfile from "../types/param-filter-profile.interface";
@@ -90,9 +90,11 @@ export const userLogin = async (data: User) => {
   return response;
 };
 
-export const userProfile = async (data: ParamFilterProfile) => {
+export const userProfile = async (authorization: string) => {
   try {
-    const user = await findUser("email", data.email!);
+    const token = authorization.replace("Bearer ", "");
+    const verify = verifyJWT(token);
+    const user = await findUser("email", verify.encoded.email);
     setResponse({
       status: true,
       statusCode: 200,

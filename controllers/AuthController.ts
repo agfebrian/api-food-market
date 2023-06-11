@@ -14,7 +14,7 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const handlerGetProfile = async (req: Request, res: Response) => {
-  const params = req.query;
-  const data = await userProfile(params);
+  const authorization = req.headers.authorization!;
+  const data = await userProfile(authorization);
   res.status(data.statusCode).send(data);
 };
