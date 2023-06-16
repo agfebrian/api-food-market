@@ -9,6 +9,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 routes(app);
+app.use("/uploads", express.static("uploads"));
 
 const port: number = 4000;
 app.listen(port, () => console.log(`Server is listening app on port ${port}`));

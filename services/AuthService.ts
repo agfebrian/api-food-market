@@ -1,9 +1,12 @@
 import { Prisma, User } from "@prisma/client";
-import { register as regist, findUser } from "../repositories/AuthRespository";
+import {
+  register as regist,
+  findUser,
+  updateProfilePhoto,
+} from "../repositories/AuthRespository";
 import { signJWT, verifyJWT } from "../utils/auth/jwt";
 import { response, setResponse } from "../response";
 import bcrypt from "bcrypt";
-import ParamFilterProfile from "../types/param-filter-profile.interface";
 
 export const userRegister = async (data: User) => {
   try {
@@ -108,6 +111,34 @@ export const userProfile = async (authorization: string) => {
       statusCode: 422,
       data: null,
       message: "Failed getting profile",
+      errors: [error.message],
+    });
+  }
+  return response;
+};
+
+export const userUpdateProfilePhoto = async (
+  authorization: string,
+  path: string
+) => {
+  try {
+    const token = authorization.replace("Bearer ", "");
+    const verify = verifyJWT(token);
+    const user = await findUser("email", verify.encoded.email);
+    const data = await updateProfilePhoto(user!.id, path);
+    setResponse({
+      status: true,
+      statusCode: 200,
+      data: data,
+      message: "Success update profile photo",
+      errors: [],
+    });
+  } catch (error: any) {
+    setResponse({
+      status: false,
+      statusCode: 500,
+      data: null,
+      message: "Failed update profile photo",
       errors: [error.message],
     });
   }

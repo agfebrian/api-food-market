@@ -16,3 +16,15 @@ export const findUser = async (key: string, value: string) => {
   });
   return user;
 };
+
+export const updateProfilePhoto = async (id: string, path: string) => {
+  const user = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      avatar: path,
+    },
+  });
+  return user;
+};
