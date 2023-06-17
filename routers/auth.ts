@@ -14,7 +14,9 @@ import path from "path";
 export const authRoute: Router = Router();
 
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../uploads/"),
+  destination(req, file, callback) {
+    callback(null, path.join(__dirname, "../../uploads/"));
+  },
   filename(req, file, callback) {
     callback(
       null,
