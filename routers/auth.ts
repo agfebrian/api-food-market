@@ -9,13 +9,12 @@ import { validateRegister } from "../middlewares/validations/register";
 import { auth } from "../middlewares/authentication";
 import multer from "multer";
 import bcrypt from "bcrypt";
+import path from "path";
 
 export const authRoute: Router = Router();
 
 const storage = multer.diskStorage({
-  destination(req, file, callback) {
-    callback(null, "uploads/");
-  },
+  destination: path.join(__dirname, "../../uploads/"),
   filename(req, file, callback) {
     callback(
       null,
