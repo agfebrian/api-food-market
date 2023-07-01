@@ -109,6 +109,7 @@ export const createOrder = async (data: RequestOrder) => {
       status: "PENDING",
       quantity: data.quantity,
       total: data.total,
+      link: redirect_url,
       food_id: data.food_id,
       user_id: data.user_id,
       created_at: new Date(),

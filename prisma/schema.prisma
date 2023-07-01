@@ -67,6 +67,7 @@ model Order {
   status     Status   @default(PENDING)
   quantity   Int
   total      Int
+  link       String
   user       User     @relation(fields: [user_id], references: [id])
   user_id    String
   food       Food     @relation(fields: [food_id], references: [id])
