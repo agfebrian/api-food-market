@@ -9,6 +9,7 @@ import { RequestOrder } from "../types/request-order.interface";
 import ParamFilterOrder from "../types/param-filter-order.interface";
 import { response, setResponse } from "../response";
 import { Status } from "@prisma/client";
+import fetch from "node-fetch";
 
 export const getAllOrder = async (data: ParamFilterOrder) => {
   let status: Status[] = [];
@@ -197,6 +198,52 @@ export const paymentNotification = async (data: any) => {
       data: {} as any,
       errors: [error.message],
     });
+  }
+  return response;
+};
+
+export const cancelOrder = async (trxId: string) => {
+  const apiUrl = `https://api.sandbox.midtrans.com/v2/${trxId}/cancel`;
+  const options = {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      authorization: `Basic ${process.env.SERVER_KEY_PAYMENT_HASHED}`,
+    },
+  };
+  const { status_code } = await fetch(apiUrl, options).then((res) =>
+    res.json()
+  );
+
+  switch (status_code) {
+    case "401":
+      setResponse({
+        status: false,
+        statusCode: 401,
+        message: "Unauthorized",
+        data: {} as any,
+        errors: [],
+      });
+      break;
+    case "200":
+      await updateOrderStatus(trxId, "CANCELED");
+      setResponse({
+        status: true,
+        statusCode: 200,
+        message: "Success cancel order",
+        data: {} as any,
+        errors: [],
+      });
+      break;
+    default:
+      setResponse({
+        status: false,
+        statusCode: Number(status_code),
+        message: "Failed cancel order",
+        data: {} as any,
+        errors: [],
+      });
+      break;
   }
   return response;
 };

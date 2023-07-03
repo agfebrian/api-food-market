@@ -4,6 +4,7 @@ import {
   handleGetOrder,
   handlerOrder,
   handlerPaymentNotification,
+  handleCancelOrder,
 } from "../controllers/OrderController";
 import { auth } from "../middlewares/authentication";
 
@@ -16,3 +17,4 @@ orderRouter.use(auth);
 orderRouter.get("/", handleGetAllOrder);
 orderRouter.get("/:trx", handleGetOrder);
 orderRouter.post("/", handlerOrder);
+orderRouter.post("/:trx/cancel", handleCancelOrder);

@@ -4,6 +4,7 @@ import {
   findOrder,
   getAllOrder,
   paymentNotification,
+  cancelOrder,
 } from "../services/OrderService";
 import { RequestOrder } from "../types/request-order.interface";
 import ParamFilterOrder from "../types/param-filter-order.interface";
@@ -36,5 +37,11 @@ export const handlerPaymentNotification = async (
 ) => {
   const request = req.body;
   const data = await paymentNotification(request);
+  res.status(data.statusCode).send(data);
+};
+
+export const handleCancelOrder = async (req: Request, res: Response) => {
+  const trx = req.params.trx;
+  const data = await cancelOrder(trx);
   res.status(data.statusCode).send(data);
 };

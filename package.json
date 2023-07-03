@@ -26,13 +26,15 @@
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.0",
     "midtrans-client": "^1.3.1",
-    "multer": "*"
+    "multer": "*",
+    "node-fetch": "^2.6.12"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.13",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/multer": "^1.4.7",
+    "@types/node-fetch": "^2.6.4",
     "nodemon": "^2.0.22",
     "prisma": "^4.14.1",
     "ts-node": "^10.9.1",
