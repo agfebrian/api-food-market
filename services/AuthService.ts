@@ -99,13 +99,23 @@ export const userProfile = async (authorization: string) => {
     const token = authorization.replace("Bearer ", "");
     const verify = verifyJWT(token);
     const user = await findUser("email", verify.encoded.email);
-    setResponse({
-      status: true,
-      statusCode: 200,
-      data: user,
-      message: "Success getting profile",
-      errors: [],
-    });
+    if (user!.email) {
+      setResponse({
+        status: true,
+        statusCode: 200,
+        data: user,
+        message: "Success getting profile",
+        errors: [],
+      });
+    } else {
+      setResponse({
+        status: false,
+        statusCode: 401,
+        data: null,
+        message: "User unautorized",
+        errors: [],
+      });
+    }
   } catch (error: any) {
     setResponse({
       status: false,
