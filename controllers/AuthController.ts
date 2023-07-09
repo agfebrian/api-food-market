@@ -29,9 +29,7 @@ export const handlerUpdateProfilePhoto = async (
   res: Response
 ) => {
   const authorization = req.headers.authorization!;
-  const data = await userUpdateProfilePhoto(
-    authorization,
-    `${req.file?.destination}${req.file?.filename}`
-  );
+  const avatar = req.file!.path;
+  const data = await userUpdateProfilePhoto(authorization, avatar);
   res.status(data.statusCode).send(data);
 };

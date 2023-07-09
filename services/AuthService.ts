@@ -7,6 +7,7 @@ import {
 import { signJWT, verifyJWT } from "../utils/auth/jwt";
 import { response, setResponse } from "../response";
 import bcrypt from "bcrypt";
+import cloud from "../utils/cloud";
 
 export const userRegister = async (data: User) => {
   try {
@@ -119,13 +120,16 @@ export const userProfile = async (authorization: string) => {
 
 export const userUpdateProfilePhoto = async (
   authorization: string,
-  path: string
+  avatar: string
 ) => {
   try {
     const token = authorization.replace("Bearer ", "");
     const verify = verifyJWT(token);
     const user = await findUser("email", verify.encoded.email);
-    const data = await updateProfilePhoto(user!.id, path);
+
+    // store images to cloudinary
+    const { secure_url } = await cloud.uploader.upload(avatar);
+    const data = await updateProfilePhoto(user!.id, secure_url);
     setResponse({
       status: true,
       statusCode: 200,
