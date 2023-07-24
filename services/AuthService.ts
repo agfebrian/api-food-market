@@ -62,6 +62,11 @@ export const userLogin = async (data: User) => {
   try {
     // find user on db
     const user = await findUser("email", data.email);
+    let dataUser;
+    if (user!) {
+      dataUser = (({ password, ...rest }) => rest)(user);
+    }
+
     // compare request password
     const comparePassword = await bcrypt.compare(data.password, user!.password);
     if (comparePassword) {
@@ -69,7 +74,7 @@ export const userLogin = async (data: User) => {
       setResponse({
         status: true,
         statusCode: 200,
-        data: { ...user, ...{ token } },
+        data: { ...dataUser, ...{ token } },
         message: "Cool, login successed",
         errors: [],
       });
@@ -100,10 +105,11 @@ export const userProfile = async (authorization: string) => {
     const verify = verifyJWT(token);
     const user = await findUser("email", verify.encoded.email);
     if (user!) {
+      const data = (({ password, ...rest }) => rest)(user);
       setResponse({
         status: true,
         statusCode: 200,
-        data: user,
+        data: data,
         message: "Success getting profile",
         errors: [],
       });
@@ -140,10 +146,16 @@ export const userUpdateProfilePhoto = async (
     // store images to cloudinary
     const { secure_url } = await cloud.uploader.upload(avatar);
     const data = await updateProfilePhoto(user!.id, secure_url);
+    let dataUser;
+
+    if (data) {
+      dataUser = (({ password, ...rest }) => rest)(data);
+    }
+
     setResponse({
       status: true,
       statusCode: 200,
-      data: data,
+      data: dataUser,
       message: "Success update profile photo",
       errors: [],
     });
