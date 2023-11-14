@@ -28,7 +28,7 @@ const main = async () => {
         price: 15000,
         rating: 3,
         image:
-          "https://foodmarket-backend.buildwithangga.id/storage/assets/food/yL6Igz8JjWEllcqYYIJ0Arqi7Jfe2agaXe33g40Y.jpeg",
+          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699846301/sushi_nsjx2i.jpg",
       },
       {
         name: "Baso Malang",
@@ -36,7 +36,7 @@ const main = async () => {
         price: 10000,
         rating: 4,
         image:
-          "https://foodmarket-backend.buildwithangga.id/storage/assets/food/4jjxgHdPKx8Xdx15iQRLnZ6yg1J9dNVdTXVxPl5m.jpeg",
+          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699846301/meatballs_o2hsfo.jpg",
       },
       {
         name: "Spageti",
@@ -45,7 +45,7 @@ const main = async () => {
         price: 50000,
         rating: 5,
         image:
-          "https://foodmarket-backend.buildwithangga.id/storage/assets/food/sYrOblD3NXmQ1QefXraOeSW14runwHWQuLlRODaW.jpeg",
+          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699846301/spagetti_h8os9p.jpg",
       },
       {
         name: "Pizza",
@@ -54,7 +54,7 @@ const main = async () => {
         price: 100000,
         rating: 4,
         image:
-          "https://foodmarket-backend.buildwithangga.id/storage/assets/food/obI7CfhHdsZOR0ynQy2YT248Glkszw3Bq4NSi6WM.jpeg",
+          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699846397/pizza_dt71zy.jpg",
       },
     ],
   });
