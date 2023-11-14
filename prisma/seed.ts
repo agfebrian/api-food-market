@@ -28,7 +28,7 @@ const main = async () => {
         price: 15000,
         rating: 3,
         image:
-          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699846301/sushi_nsjx2i.jpg",
+          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699939994/sushi_nsjx2i_vve5j0.webp",
       },
       {
         name: "Baso Malang",
@@ -36,7 +36,7 @@ const main = async () => {
         price: 10000,
         rating: 4,
         image:
-          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699846301/meatballs_o2hsfo.jpg",
+          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699939995/meatballs_o2hsfo_zdgdh4.webp",
       },
       {
         name: "Spageti",
@@ -45,7 +45,7 @@ const main = async () => {
         price: 50000,
         rating: 5,
         image:
-          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699846301/spagetti_h8os9p.jpg",
+          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699939995/spagetti_h8os9p_yxamgg.webp",
       },
       {
         name: "Pizza",
@@ -54,7 +54,7 @@ const main = async () => {
         price: 100000,
         rating: 4,
         image:
-          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699846397/pizza_dt71zy.jpg",
+          "https://res.cloudinary.com/dwt0lg4ti/image/upload/v1699939994/pizza_dt71zy_tx4yap.webp",
       },
     ],
   });
