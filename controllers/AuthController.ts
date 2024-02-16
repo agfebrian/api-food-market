@@ -5,6 +5,7 @@ import {
   userProfile,
   userUpdateProfilePhoto,
 } from "../services/AuthService";
+import type { RequestUploadFile } from "../types/request-upload-file.interface";
 
 export const register = async (req: Request, res: Response) => {
   const payload = req.body;
@@ -29,7 +30,8 @@ export const handlerUpdateProfilePhoto = async (
   res: Response
 ) => {
   const authorization = req.headers.authorization!;
-  const avatar = req.file!.path;
+  const request = req as RequestUploadFile;
+  const avatar = request.file.path;
   const data = await userUpdateProfilePhoto(authorization, avatar);
   res.status(data.statusCode).send(data);
 };
